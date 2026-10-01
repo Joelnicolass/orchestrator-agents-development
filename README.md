@@ -63,19 +63,28 @@ flowchart TD
 
   pedido[Pedido] --> kit{Es trabajo sobre el kit?}
   kit -->|si| directo[Se edita en este chat, sin change]
-  kit -->|no| tipo{Capacidad, contrato, datos persistentes o flujo nuevo?}
+  kit -->|no| claro{El pedido ya nombra el resultado?}
+  claro -->|no| start[sdd-start]
+  claro -->|si| tipo{Capacidad, contrato, datos persistentes o flujo nuevo?}
+  start --> modo{Hay codigo en el repo?}
+  modo -->|si| scan[Escanea stack, chequeo y openspec]
+  modo -->|no| preguntas[Preguntas en tandas de 3 a 5]
+  scan --> falta{El codigo no alcanza?}
+  falta -->|si| preguntas
+  falta -->|no| tipo
+  preguntas --> tipo
   tipo -->|no| rapido[Carril rapido]
   tipo -->|si| completo[Carril completo]
   tipo -->|no esta claro| triage[sdd-triage]
   triage -->|fast-track| rapido
   triage -->|full| completo
 
-  class directo human
-  class rapido fast
-  class completo,triage full
+  class directo,preguntas human
+  class rapido,scan fast
+  class completo,triage,start full
 ```
 
-Si el pedido ya nombra archivo y resultado, no se lanza el triage.
+Si el pedido ya nombra el resultado, se clasifica directo. Si no, `/sdd-start` escanea el repo o pregunta, y después entra al carril.
 
 ### Carril rápido
 
@@ -213,6 +222,7 @@ En el chat del repo instalado:
 
 | Comando | Qué hace |
 | --- | --- |
+| `/sdd-start` | Pregunta o escanea el proyecto y entra al carril |
 | `/sdd-triage` | Elige carril |
 | `/sdd-propose` | Proposal y specs |
 | `/sdd-critique` | Huecos y choques con las reglas; después se detiene |

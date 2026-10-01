@@ -33,11 +33,13 @@ Carriles: [lanes.md](lanes.md). Lanzamiento: [prompts.md](prompts.md). Fragmento
 ## Arranque
 
 1. Lee `openspec/config.yaml` si existe. Si no hay `openspec/`, hace falta `./install.sh` en el repo de la app.
-2. Clasifica con [lanes.md](lanes.md). `sdd-triage` solo si de verdad no se sabe si hay capacidad, contrato, datos o flujo nuevo.
-3. Sigue el comando de la fase. Instalados quedan en `.cursor/commands/`.
+2. Si el pedido no nombra el resultado, o el `context` del config sigue en el texto de ejemplo, corre `sdd-start` antes de clasificar. Ahí se escanea el repo o se pregunta, y se escribe `openspec/intake.md`.
+3. Clasifica con [lanes.md](lanes.md). `sdd-triage` solo si, después del arranque, sigue sin verse si hay capacidad, contrato, datos o flujo nuevo.
+4. Sigue el comando de la fase. Instalados quedan en `.cursor/commands/`.
 
 | Pedido | Comando |
 | --- | --- |
+| Arrancar | `sdd-start` |
 | Clasificar | `sdd-triage` |
 | Borrador | `sdd-propose` |
 | Critique | `sdd-critique` |
