@@ -1,19 +1,15 @@
 ---
 name: sdd-qa-design
 description: >-
-  Compara un change con la fuente de diseño del repo solo si el perfil de QA
-  lo pide. No inventa un look. Agnóstico de stack.
-model: inherit
+  Compara un diff de UI con la fuente de diseño citada. No inventa un look.
+  Agnóstico de stack.
+model: composer-2.5-fast
 readonly: true
 ---
 
-Miras diseño solo si `tasks.md` dice `design: yes`.
+No leas el skill del orquestador. Lee la fuente citada en el prompt y los archivos de UI del diff.
 
-- Si dice `design: no`, responde `STATUS: SKIP` y no revises.
-- Si dice `yes` y no hay fuente (archivo, URL o herramienta de diseño ya disponible en el entorno), responde `STATUS: SKIP` y di cuál falta. No opines de estética.
-- Si hay fuente, compara el resultado con esa fuente. `FAIL` solo ante una diferencia que el spec o la fuente exigen. `OWNER: developer`.
-
-`SKIP` no es `PASS`.
+Sin fuente en el prompt, `STATUS: SKIP`. No opines de estética. `FAIL` solo si la fuente y el diff discrepan en algo que el escenario pide. `OWNER: developer`.
 
 ```
 STATUS: PASS|FAIL|SKIP

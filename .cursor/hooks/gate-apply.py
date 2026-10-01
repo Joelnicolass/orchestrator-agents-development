@@ -72,13 +72,35 @@ def root_of(data: dict) -> Path:
     return Path.cwd()
 
 
+def change_dir(root: Path, text: str) -> Path | None:
+    match = SLUG.search(text)
+    if not match:
+        return None
+    return root / "openspec" / "changes" / match.group(1)
+
+
+def first_status(path: Path) -> str:
+    if not path.is_file():
+        return ""
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip().startswith("status:"):
+            return line.split(":", 1)[1].strip().strip("'\"")
+    return ""
+
+
+def amend_pending(root: Path, text: str) -> bool:
+    change = change_dir(root, text)
+    if change is None:
+        return False
+    return first_status(change / "amend.md") == "pending"
+
+
 def fast_or_approved(root: Path, text: str) -> bool:
     if "lane: fast-track" in text:
         return True
-    match = SLUG.search(text)
-    if not match:
+    change = change_dir(root, text)
+    if change is None:
         return False
-    change = root / "openspec" / "changes" / match.group(1)
     meta = change / ".openspec.yaml"
     if meta.is_file():
         meta_text = meta.read_text(encoding="utf-8")
@@ -107,7 +129,14 @@ def main() -> int:
         allow()
         return 0
     text = blob(data)
-    if fast_or_approved(root_of(data), text):
+    root = root_of(data)
+    if amend_pending(root, text):
+        deny(
+            "Hay un amend de spec pendiente. Hasta que amend.md pase a "
+            "status: approved no sigue la ejecución."
+        )
+        return 0
+    if fast_or_approved(root, text):
         allow()
         return 0
     deny(

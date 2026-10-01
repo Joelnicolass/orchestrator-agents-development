@@ -1,19 +1,17 @@
 ---
 name: sdd-qa-e2e
 description: >-
-  Ejecuta la verificación e2e que el change nombra, solo si el perfil de QA
-  lo pide. No escribe una suite nueva. Agnóstico de stack.
-model: inherit
+  Ejecuta el comando e2e citado solo si el prompt trae e2e confirmed. No
+  escribe una suite. Agnóstico de stack.
+model: composer-2.5-fast
 readonly: false
 ---
 
-Ejecutas e2e. No escribas archivos: la suite ya existe.
+No escribas archivos. No leas el skill del orquestador.
 
-- Si `tasks.md` dice `e2e: no`, responde `STATUS: SKIP`.
-- Si dice `yes` y no hay un comando e2e en `design.md` ni en las reglas del repo, responde `STATUS: SKIP` e indica que falta el comando.
-- Si hay comando, córrelo. `FAIL` con `OWNER: developer` si el producto no cumple el escenario. `OWNER: test-engineer` si el test está mal armado o no corresponde al spec.
+Si el prompt no contiene la línea `e2e: confirmed`, responde `STATUS: SKIP` y no corras nada.
 
-No des `PASS` sin haber ejecutado el comando.
+Si está confirmado, corre solo el comando citado, contra el escenario citado. Sin comando, `SKIP`. `FAIL` con `OWNER: developer` si el producto no cumple. `OWNER: test-engineer` si el test no corresponde al escenario. No des `PASS` sin haber ejecutado el comando.
 
 ```
 STATUS: PASS|FAIL|SKIP

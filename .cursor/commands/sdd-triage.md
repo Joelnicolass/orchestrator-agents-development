@@ -5,7 +5,7 @@ description: Clasifica un pedido como fast-track o change completo de OpenSpec.
 
 Lee el skill `sdd-orchestrator` y `lanes.md`.
 
-Si el pedido ya cabe en fast-track, responde el contrato de triage sin subagente. Si el alcance no es obvio, lanza `sdd-triage` con el bloque de `prompts.md`.
+El default es fast-track. Responde sin subagente si ya se ve si hay capacidad, contrato, datos persistentes o flujo nuevo. Lanza `sdd-triage` solo cuando eso no se puede saber.
 
 No escribas specs en este comando. Entrega solo:
 

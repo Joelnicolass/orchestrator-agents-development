@@ -20,6 +20,8 @@ REQUIRED = {
         "generates: specs/**/*.md",
         "tracks: tasks.md",
         "status: approved",
+        "Máximo 40 líneas",
+        "Como máximo cinco preguntas",
     ],
     "sdd-fast": [
         "id: tasks",

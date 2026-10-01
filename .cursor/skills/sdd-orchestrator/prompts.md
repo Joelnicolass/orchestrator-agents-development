@@ -1,6 +1,6 @@
 # Prompts de subagentes
 
-Sustituye `{{...}}` antes de lanzar. El tipo de subagente es el `name` del agente. Un dominio por tech lead. No lances dev y reviewer a la vez sobre el mismo change.
+Sustituye `{{...}}` antes de lanzar. No pases `model`: critique y tech lead heredan el del chat; el resto lo trae su archivo. Un dominio por tech lead. No lances dev y reviewer a la vez.
 
 ## Bloque común
 
@@ -9,78 +9,50 @@ Repo: {{root}}
 Change: openspec/changes/{{slug}}
 Lane: {{lane}}
 Dominio: {{domain}}
-Lee openspec/config.yaml y .cursor/rules. El stack es el del repo.
-No abras otro sistema de specs.
-Al terminar responde solo con el contrato de tu agente.
+No leas el skill del orquestador ni abras otro sistema de specs.
+Lee solo el recorte de tu rol. Responde solo con tu contrato.
 ```
 
-`{{lane}}` es `fast-track` o `full`. En fast-track la línea tiene que quedar literal: `Lane: fast-track` no alcanza para el hook; escribe también una línea sola `lane: fast-track`.
+En fast-track añade una línea sola `lane: fast-track`.
 
-## Orden de ejecución
+## Recortes
 
-- Tech leads en paralelo cuando los `## Files` no comparten rutas.
-- Si los tests y el código de producto se solapan, el test engineer escribe primero. Si los paths son disjuntos, van en paralelo.
-- El dev no arranca si el test engineer todavía no escribió los casos que le tocan, salvo que `## Tests` diga que no hay casos.
+Pega en el prompt solo esto. No adjuntes el change entero.
+
+| Rol | Lee |
+| --- | --- |
+| Critique | `proposal.md` si cabe en 40 líneas, el spec, y como máximo 30 líneas de reglas pegadas en el prompt. Sin recorrer el repo. |
+| Critique de amend | `amend.md` y el requisito citado. Nada más. |
+| Tech lead | Escenarios del spec y los directorios listados en el prompt. |
+| Test engineer | `## Tests` y los escenarios citados. |
+| Developer | `## Implementation` o, en fast-track, `## Tasks`, más `## Files`. |
+| Reviewer | Diff y escenarios citados. |
+| QA design | Fuente citada y archivos de UI del diff. |
+| QA e2e | Comando y escenario. Sin la línea `e2e: confirmed`, responde SKIP. |
+| Documenter | `tasks.md`. Sin leer código. |
+
+Un FAIL se relanza con los hallazgos y las rutas, sin volver a pegar el spec.
+
+## Orden
+
+- Tech leads en paralelo solo si los `## Files` no comparten rutas.
+- Tests y dev en secuencia si se solapan. En paralelo solo con rutas disjuntas.
 - Reviewer después de `.eval-pass`.
-- QA de diseño y e2e solo si el perfil dice `yes`, después del reviewer en `PASS`.
-- Segunda vuelta de FAIL como máximo. A la tercera, para y pregunta.
+- e2e solo si hay comando en el design y la persona dijo que sí. Entonces el prompt lleva `e2e: confirmed`.
+- Segunda vuelta de FAIL como máximo.
 
 ## Contratos
 
-Triage:
+Triage: `LANE`, `SCHEMA`, `REASON` en una frase.
 
-```
-LANE: fast-track|full
-SCHEMA: sdd-fast|sdd-orchestrated
-REASON: una frase
-```
+Critique: `STATUS: block|pass`. En un amend, el status juzga el delta.
 
-Critique (además escribe `critique.md`):
+Tech lead: `STATUS: READY`, `DOMAIN`, `FILES`.
 
-```
-STATUS: block|pass
-```
+Test engineer: `STATUS: WRITTEN` o `STATUS: AMEND`, `RESULT: red|green`, `TESTS`. `red` es válido si el producto todavía no cumple. `AMEND` si el caso no se puede escribir sin inventar comportamiento: no escribas el test.
 
-Tech lead (además escribe solo `domains/<dominio>.md`):
+Developer: `STATUS: PASS|FAIL|AMEND`, `EVAL`, `TASKS`. `AMEND` si el spec no cubre el caso: no implementes el hueco.
 
-```
-STATUS: READY
-DOMAIN: nombre
-FILES: cantidad
-```
+Reviewer y QA: `STATUS: PASS|FAIL|SKIP`, `OWNER`, `FINDINGS`. `SKIP` no es `PASS`.
 
-Test engineer:
-
-```
-STATUS: WRITTEN
-RESULT: red|green
-TESTS: rutas
-```
-
-`red` es válido si el test expresa el caso y el producto todavía no cumple. No reescribas el producto.
-
-Developer:
-
-```
-STATUS: PASS|FAIL
-EVAL: pass|fail|skipped
-TASKS: ids marcados
-```
-
-Reviewer, QA design, QA e2e:
-
-```
-STATUS: PASS|FAIL|SKIP
-OWNER: developer|test-engineer|none
-FINDINGS:
-- archivo: hallazgo
-```
-
-`SKIP` cuando el perfil está en `no`, o cuando no hay fuente de diseño / comando e2e. `SKIP` no es `PASS`.
-
-Documenter:
-
-```
-STATUS: DRAFT
-FILES: pr-body.md notes.md
-```
+Documenter: `STATUS: DRAFT`, `FILES`.

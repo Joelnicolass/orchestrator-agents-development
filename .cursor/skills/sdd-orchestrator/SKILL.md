@@ -2,77 +2,57 @@
 name: sdd-orchestrator
 description: >-
   Orquesta desarrollo spec-driven y multiagente sobre OpenSpec, agnóstico de
-  stack. Enruta fast-track o change completo (proposal, critique, aprobación
-  humana, tech leads por dominio, dev, test engineer, QA según el change).
-  Usar ante una feature, un RFC, un bug, un cambio de comportamiento, OpenSpec,
-  Spec Kit, o cuando piden el orquestador SDD.
+  stack. El default es fast-track. El carril completo pide critique, aprobación
+  y tech lead. Un hueco de spec se parcha con amend, sin abrir otro change.
+  Usar ante una feature, un RFC, un bug, un cambio de comportamiento, OpenSpec
+  o cuando piden el orquestador SDD.
+disable-model-invocation: true
 ---
 
 # Orquestador SDD
 
-El agente de este chat es el orquestador. Reparte trabajo. No implementa el change en este hilo.
+El agente de este chat es el orquestador. Reparte trabajo. No implementa el change en este hilo. Los subagentes `sdd-*` no leen este skill.
 
-Motor de specs: **OpenSpec**, carpeta `openspec/`. Los schemas de este kit son `sdd-orchestrated` y `sdd-fast`. No abras un segundo árbol de specs al lado.
+Motor de specs: **OpenSpec**, carpeta `openspec/`. Schemas: `sdd-fast` (default) y `sdd-orchestrated`.
 
 ## Invariantes
 
-1. Un solo árbol de specs: `openspec/`. No crees `.specify/`, `PRD.md` ni `RFC.md` paralelos.
-2. Un agente no escribe `status: approved`. Eso lo hace `sdd-approve` después de un sí explícito.
-3. Tech lead, dev, test engineer, reviewer, QA y documenter no arrancan sin `status: approved` o sin `lane: fast-track`.
-4. El tech lead no escribe código de producto ni de tests. Los casos van en lenguaje natural, en `domains/<dominio>.md`.
-5. El dev corre `.cursor/sdd-tools/auto-eval.sh <slug>` y se corrige antes del reviewer.
-6. La capa de QA en `no` no se lanza. `SKIP` no se anota como `PASS`.
-7. Máximo dos vueltas de `FAIL` al mismo rol. Después se pregunta.
-8. El stack sale de `openspec/config.yaml`, de `.cursor/rules` y del código. No lo supongas.
-9. No archives ni abras un PR salvo `sdd-close`, y solo si la persona lo pidió.
-10. Si el pedido edita este kit (`agents/`, `skills/`, `schemas/`, `hooks/`, `tools/`), trabaja directo sobre esos archivos. No abras un change de producto.
+1. Un solo árbol de specs: `openspec/`.
+2. Fast-track salvo capacidad nueva, contrato, datos persistentes o flujo nuevo.
+3. Un agente no escribe `status: approved`. Lo hacen `sdd-approve` y el sí del amend.
+4. Ejecución (dev, tests, review, QA, documenter, triage) usa el modelo de su archivo. Critique y tech lead heredan el modelo del chat. No pases `model` al lanzar.
+5. Cada subagente recibe solo su recorte, en [prompts.md](prompts.md). No pegues el change entero.
+6. Proposal de máximo 40 líneas. Un solo spec. Critique con máximo cinco preguntas.
+7. `e2e` nace en `no`. Se lanza con un comando ya existente y un sí en este chat (`e2e: confirmed`).
+8. Un hueco encontrado al implementar se cierra con `sdd-amend`. No abras otro change.
+9. Máximo dos vueltas de critique y dos de `FAIL`.
+10. Si el pedido edita este kit (`agents/`, `skills/`, `schemas/`, `hooks/`, `tools/`), trabaja directo.
 
-Detalle de carril: [lanes.md](lanes.md). Plantillas de lanzamiento: [prompts.md](prompts.md). Fragmento de dominio: [domain.md](domain.md).
+Carriles: [lanes.md](lanes.md). Lanzamiento: [prompts.md](prompts.md). Fragmento de dominio: [domain.md](domain.md).
 
 ## Arranque
 
-1. Lee `openspec/config.yaml` si existe. Si no hay `openspec/`, di que hace falta `./install.sh` de este kit en el repo de la app y, si quieren el CLI, `openspec init`. No inventes otra estructura.
-2. Clasifica con [lanes.md](lanes.md). Si hay duda real de alcance, lanza `sdd-triage` con el bloque de [prompts.md](prompts.md).
-3. Sigue el comando de la fase. Están en `commands/` del kit y, instalados, en `.cursor/commands/`.
+1. Lee `openspec/config.yaml` si existe. Si no hay `openspec/`, hace falta `./install.sh` en el repo de la app.
+2. Clasifica con [lanes.md](lanes.md). `sdd-triage` solo si de verdad no se sabe si hay capacidad, contrato, datos o flujo nuevo.
+3. Sigue el comando de la fase. Instalados quedan en `.cursor/commands/`.
 
 | Pedido | Comando |
 | --- | --- |
 | Clasificar | `sdd-triage` |
-| Borrador de change | `sdd-propose` |
-| Abogado del diablo | `sdd-critique` |
+| Borrador | `sdd-propose` |
+| Critique | `sdd-critique` |
 | Sí humano | `sdd-approve` |
-| Dominios y tareas | `sdd-plan` |
+| Dominios | `sdd-plan` |
 | Implementar | `sdd-implement` |
+| Hueco de spec | `sdd-amend` |
 | Revisar | `sdd-review` |
-| Dónde quedamos | `sdd-status` |
+| Estado | `sdd-status` |
 | Cerrar | `sdd-close` |
 
-## Cómo lanzar
+## Amend
 
-Usa el subagente cuyo `name` coincide con el rol (`sdd-developer`, `sdd-tech-lead`, …). Pega el bloque común de [prompts.md](prompts.md) con el slug real en la primera línea de ruta: `openspec/changes/<slug>`. En fast-track añade una línea `lane: fast-track`.
-
-Después de los fragmentos de dominio:
-
-```bash
-python3 .cursor/sdd-tools/merge-domains.py openspec/changes/<slug>
-```
-
-Estado sin CLI:
-
-```bash
-python3 .cursor/sdd-tools/change-status.py
-```
+`amend.md` con `status: pending` frena a los agentes de ejecución. El critique sí puede correr: recibe solo el delta. Con el sí, `status: approved`. Si `design_impact: no`, se retoman las tareas. Si `design_impact: yes`, un tech lead del dominio afectado y `merge-domains.py`. El `approval.md` original no se reabre.
 
 ## Parada humana
 
-Después del critique con `pass`, o tras dos `block`, enseña hallazgos y preguntas y termina el turno. No planifiques en ese mismo turno.
-
-## Cierre de una vuelta
-
-No des el change por hecho si falta evidencia. Comprueba:
-
-- [ ] `tasks.md` sin checkboxes pendientes, o el usuario acotó el corte
-- [ ] `.eval-pass` presente cuando hubo dev
-- [ ] Reviewer en `PASS` si el perfil pide code review
-- [ ] QA en `PASS` o `SKIP` según el perfil, con el motivo escrito en `notes.md`
-- [ ] `pr-body.md` solo si se va a cerrar
+Después del critique, enseña hallazgos y termina el turno. Lo mismo después de un amend, antes de seguir implementando.

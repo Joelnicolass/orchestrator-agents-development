@@ -8,9 +8,9 @@ artifacts:
     description: Por qué hace falta el cambio y qué comportamiento observable agrega
     template: proposal.md
     instruction: |
+      Máximo 40 líneas.
       Describe el problema y el resultado observable.
       No incluyas stack, archivos ni diseño de implementación.
-      El contexto del proyecto sale de openspec/config.yaml.
     requires: []
 
   - id: specs
@@ -18,8 +18,8 @@ artifacts:
     description: Requisitos y escenarios del cambio
     template: spec.md
     instruction: |
-      Un archivo por capacidad, en specs/<capacidad>/spec.md.
-      Cada requisito usa SHALL y al menos un escenario GIVEN/WHEN/THEN.
+      Un solo archivo: specs/<capacidad>/spec.md.
+      Cada requisito usa SHALL y un escenario GIVEN/WHEN/THEN.
       Sin tareas ni nombres de archivos.
     requires:
       - proposal
@@ -29,10 +29,11 @@ artifacts:
     description: Huecos, dependencias y choques con las reglas del repo
     template: critique.md
     instruction: |
-      Lee proposal, specs, openspec/config.yaml y las reglas del repo.
+      Como máximo cinco preguntas.
       Escribe solo hallazgos. No reescribas el proposal ni el spec.
       status: block si hay un hueco que haría implementar mal.
       status: pass si un humano ya puede decidir.
+      Si existe amend.md, juzga solo ese delta.
     requires:
       - specs
 
@@ -55,7 +56,7 @@ artifacts:
       No crees este archivo hasta que approval.md contenga status: approved.
       Declara dominios con árboles de archivos disjuntos.
       Los casos de prueba van en lenguaje natural. Sin código de tests.
-      Apaga design y e2e cuando este change no los necesita.
+      e2e queda en no. El orquestador lo enciende solo con un comando ya existente y un sí de la persona.
     requires:
       - approval
 

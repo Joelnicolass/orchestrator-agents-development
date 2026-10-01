@@ -19,6 +19,23 @@ for folder in ("agents", "commands"):
 skill = Path("skills/sdd-orchestrator/SKILL.md").read_text(encoding="utf-8").splitlines()
 if len(skill) > 500:
     errors.append(f"SKILL.md tiene {len(skill)} líneas")
+models = {
+    "sdd-critique": "inherit",
+    "sdd-tech-lead": "inherit",
+    "sdd-triage": "composer-2.5-fast",
+    "sdd-developer": "composer-2.5-fast",
+    "sdd-test-engineer": "composer-2.5-fast",
+    "sdd-reviewer": "composer-2.5-fast",
+    "sdd-qa-design": "composer-2.5-fast",
+    "sdd-qa-e2e": "composer-2.5-fast",
+    "sdd-documenter": "composer-2.5-fast",
+}
+for name, model in models.items():
+    text = Path(f"agents/{name}.md").read_text(encoding="utf-8")
+    if f"model: {model}\n" not in text:
+        errors.append(f"{name}: se esperaba model {model}")
+if not Path("commands/sdd-amend.md").is_file():
+    errors.append("falta commands/sdd-amend.md")
 if errors:
     raise SystemExit("\n".join(errors))
 print("nombres ok")
@@ -44,6 +61,17 @@ TMP="$(mktemp -d)"
   expect_perm '{"subagent_type":"sdd-developer","prompt":"openspec/changes/typo"}' allow
   printf 'status: approved\n' > openspec/changes/add-login/approval.md
   expect_perm '{"subagent_type":"sdd-tech-lead","prompt":"openspec/changes/add-login"}' allow
+  cat > openspec/changes/add-login/amend.md <<'EOF'
+---
+status: pending
+design_impact: no
+---
+EOF
+  expect_perm '{"subagent_type":"sdd-developer","prompt":"lane: fast-track\nopenspec/changes/add-login"}' deny
+  expect_perm '{"subagent_type":"sdd-critique","prompt":"openspec/changes/add-login"}' allow
+  printf 'status: approved\n' > openspec/changes/add-login/amend.md
+  expect_perm '{"subagent_type":"sdd-developer","prompt":"openspec/changes/add-login"}' allow
+  rm openspec/changes/add-login/amend.md
   printf '%s' '{"subagent_type":"sdd-developer","prompt":"openspec/changes/add-login"}' | python3 "$ROOT/hooks/nudge-auto-eval.py" | python3 -c 'import json,sys; data=json.loads(sys.stdin.read()); assert "followup_message" in data'
   printf 'result: pass\n' > openspec/changes/add-login/.eval-pass
   printf '%s' '{"subagent_type":"sdd-developer","prompt":"openspec/changes/add-login"}' | python3 "$ROOT/hooks/nudge-auto-eval.py" | python3 -c 'import json,sys; data=json.loads(sys.stdin.read()); assert data=={}'
