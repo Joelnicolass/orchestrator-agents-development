@@ -1,0 +1,6 @@
+schema: sdd-orchestrated
+
+context: |
+  Este repo es el kit del orquestador. Los changes de una aplicación viven
+  en el repo donde se instaló el kit. Editar agents, skills, schemas, hooks
+  y tools es trabajo sobre el kit y no abre un change de producto.

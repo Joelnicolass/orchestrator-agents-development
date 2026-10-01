@@ -1,0 +1,20 @@
+schema: sdd-orchestrated
+
+context: |
+  Escribe aquí el stack, la forma de correr lint y tests, y las reglas que
+  todos los changes deben respetar. Los agentes leen este bloque.
+  No dejes un framework de ejemplo: pon el del repo.
+
+rules:
+  proposal:
+    - Problema y resultado observable. Sin diseño de implementación.
+  specs:
+    - Escenarios Given/When/Then. Un requisito, un comportamiento.
+  critique:
+    - Solo hallazgos. No reescribas proposal ni specs.
+  approval:
+    - status pending. Un agente no aprueba.
+  design:
+    - Dominios, árbol de archivos y perfil de QA. Sin código de tests.
+  tasks:
+    - Checkboxes cerrables en una pasada. Tests en lenguaje natural.

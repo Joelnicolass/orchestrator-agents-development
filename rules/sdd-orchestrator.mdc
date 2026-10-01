@@ -1,0 +1,13 @@
+---
+description: >-
+  Los cambios de comportamiento pasan por OpenSpec y el orquestador SDD.
+  El stack y el chequeo salen del propio repo.
+alwaysApply: true
+---
+
+# Orquestador SDD
+
+- El spec de un cambio de comportamiento vive en `openspec/`.
+- Un ajuste acotado usa el schema `sdd-fast`. El resto usa `sdd-orchestrated` y espera `status: approved` en `approval.md` antes de implementar.
+- El chequeo es `.cursor/sdd-auto-eval.cmd` si existe. Si no, el `command:` del change.
+- El stack y las reglas salen de `openspec/config.yaml` y de `.cursor/rules`.

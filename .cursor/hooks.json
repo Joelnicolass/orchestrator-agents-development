@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "subagentStart": [
+      {
+        "command": ".cursor/hooks/gate-apply.py",
+        "failClosed": false
+      }
+    ],
+    "subagentStop": [
+      {
+        "command": ".cursor/hooks/nudge-auto-eval.py",
+        "matcher": "sdd-developer",
+        "loop_limit": 1
+      }
+    ]
+  }
+}

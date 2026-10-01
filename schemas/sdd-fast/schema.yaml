@@ -1,0 +1,22 @@
+name: sdd-fast
+version: 1
+description: Cambio chico. Lista corta de tareas, sin proposal ni aprobación.
+
+artifacts:
+  - id: tasks
+    generates: tasks.md
+    description: Tareas del carril rápido
+    template: tasks.md
+    instruction: |
+      Máximo 8 tareas. El pedido ya nombra el resultado.
+      No escribas proposal, spec, critique, design ni approval.
+      Incluye el comando de verificación si el repo ya lo tiene.
+    requires: []
+
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    Lane fast-track. Implementa las tareas pendientes y corre la verificación.
+    No abras un diseño ni un critique.

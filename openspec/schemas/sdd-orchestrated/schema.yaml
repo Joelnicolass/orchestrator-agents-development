@@ -1,0 +1,82 @@
+name: sdd-orchestrated
+version: 1
+description: Change con critique y aprobación humana antes de diseño, tareas e implementación.
+
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: Por qué hace falta el cambio y qué comportamiento observable agrega
+    template: proposal.md
+    instruction: |
+      Describe el problema y el resultado observable.
+      No incluyas stack, archivos ni diseño de implementación.
+      El contexto del proyecto sale de openspec/config.yaml.
+    requires: []
+
+  - id: specs
+    generates: specs/**/*.md
+    description: Requisitos y escenarios del cambio
+    template: spec.md
+    instruction: |
+      Un archivo por capacidad, en specs/<capacidad>/spec.md.
+      Cada requisito usa SHALL y al menos un escenario GIVEN/WHEN/THEN.
+      Sin tareas ni nombres de archivos.
+    requires:
+      - proposal
+
+  - id: critique
+    generates: critique.md
+    description: Huecos, dependencias y choques con las reglas del repo
+    template: critique.md
+    instruction: |
+      Lee proposal, specs, openspec/config.yaml y las reglas del repo.
+      Escribe solo hallazgos. No reescribas el proposal ni el spec.
+      status: block si hay un hueco que haría implementar mal.
+      status: pass si un humano ya puede decidir.
+    requires:
+      - specs
+
+  - id: approval
+    generates: approval.md
+    description: Aprobación humana del change
+    template: approval.md
+    instruction: |
+      Crea el archivo con status: pending y detente.
+      Un agente no escribe status: approved.
+      Solo el comando sdd-approve lo hace, después de un sí explícito de la persona.
+    requires:
+      - critique
+
+  - id: design
+    generates: design.md
+    description: Dominios, archivos, perfil de QA y comando de verificación
+    template: design.md
+    instruction: |
+      No crees este archivo hasta que approval.md contenga status: approved.
+      Declara dominios con árboles de archivos disjuntos.
+      Los casos de prueba van en lenguaje natural. Sin código de tests.
+      Apaga design y e2e cuando este change no los necesita.
+    requires:
+      - approval
+
+  - id: tasks
+    generates: tasks.md
+    description: Tareas con checkbox, agrupadas por dominio
+    template: tasks.md
+    instruction: |
+      No crees este archivo hasta que approval.md contenga status: approved.
+      Cada tarea es un checkbox que un agente puede cerrar en una pasada.
+      Los tests son tareas aparte, en lenguaje natural, asignadas al test engineer.
+    requires:
+      - design
+
+apply:
+  requires:
+    - approval
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    No implementes si approval.md no contiene status: approved.
+    Si el status es pending, detente y pide la aprobación humana.
+    Implementa solo las tareas pendientes. Marca el checkbox al cerrar cada una.
+    Antes de dar una tarea por hecha, corre la verificación del change o .cursor/sdd-auto-eval.cmd.
