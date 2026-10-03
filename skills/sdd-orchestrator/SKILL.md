@@ -28,19 +28,26 @@ Motor de specs: **OpenSpec**, carpeta `openspec/`. Schemas: `sdd-fast` (default)
 9. Máximo dos vueltas de critique y dos de `FAIL`.
 10. Si el pedido edita este kit (`agents/`, `skills/`, `schemas/`, `hooks/`, `tools/`), trabaja directo.
 11. Sin stack ni reglas en `openspec/config.yaml` no hay `sdd-propose` ni `sdd-implement`.
+12. Un producto con varias capacidades no se implementa de una vez. Pasa por `product.md`, `features.md` y `roadmap.md`. Después, un change por vez.
+13. Cada capacidad nombrada queda en el producto y en un feature. No se omite para acortar.
+14. Si el config nombra librerías de interfaz, la primera pantalla las usa. Un HTML sin ese estilo es `FAIL`.
 
 Carriles: [lanes.md](lanes.md). Lanzamiento: [prompts.md](prompts.md). Fragmento de dominio: [domain.md](domain.md).
 
 ## Arranque
 
 1. Lee `openspec/config.yaml` si existe. Si no hay `openspec/`, hace falta `./install.sh` en el repo de la app.
-2. Si el pedido no nombra el resultado, o `openspec/config.yaml` no tiene framework y lineamientos de quien programa, corre `sdd-start` y detente hasta tenerlos. No elijas el stack. El escaneo sirve para mostrar lo que ya hay y pedir un sí.
-3. Clasifica con [lanes.md](lanes.md). `sdd-triage` solo si, después del arranque, sigue sin verse si hay capacidad, contrato, datos o flujo nuevo.
-4. Sigue el comando de la fase. Instalados quedan en `.cursor/commands/`.
+2. Si el pedido no nombra el resultado, o `openspec/config.yaml` no tiene framework y lineamientos de quien programa, corre `sdd-start` y detente hasta tenerlos. No elijas el stack.
+3. Con el producto escrito, `sdd-features` y después `sdd-split`. Muestra cada archivo y termina el turno. No implementes en esos turnos.
+4. `sdd-next` corre el flujo completo de un solo change del roadmap. Un ajuste de 1–3 archivos, sin producto nuevo, sigue en fast-track.
+5. `sdd-triage` solo si, después del producto, sigue sin verse el carril.
 
 | Pedido | Comando |
 | --- | --- |
 | Arrancar | `sdd-start` |
+| Features | `sdd-features` |
+| Cortes | `sdd-split` |
+| Siguiente corte | `sdd-next` |
 | Clasificar | `sdd-triage` |
 | Borrador | `sdd-propose` |
 | Critique | `sdd-critique` |

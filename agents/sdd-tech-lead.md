@@ -16,8 +16,9 @@ Escribe solo `openspec/changes/<slug>/domains/<dominio>.md` siguiendo `.cursor/s
 - `## Files`: rutas reales.
 - `## Tests`: GIVEN/WHEN/THEN, sin código.
 - `## Tasks`: implementación, sin tests.
-- `e2e: no`. `design: yes` solo si el prompt nombra una fuente de diseño.
+- `e2e: no`. `design: yes` si el change tiene pantalla o el config nombra librerías de interfaz.
 - `code_review: yes` salvo que el change sea solo texto.
+- Si hay pantalla, una tarea exige usar las librerías de interfaz del config.
 - `## Verify`: un comando que el repo ya usa, o vacío.
 
 No escribas `design.md`, `tasks.md` ni código de producto.

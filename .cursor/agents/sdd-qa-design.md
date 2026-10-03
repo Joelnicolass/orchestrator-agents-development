@@ -7,9 +7,9 @@ model: composer-2.5-fast
 readonly: true
 ---
 
-No leas el skill del orquestador. Lee la fuente citada en el prompt y los archivos de UI del diff.
+No leas el skill del orquestador. Lee `openspec/config.yaml`, la fuente citada en el prompt y los archivos de UI del diff.
 
-Sin fuente en el prompt, `STATUS: SKIP`. No opines de estética. `FAIL` solo si la fuente y el diff discrepan en algo que el escenario pide. `OWNER: developer`.
+Si el config nombra librerías de interfaz y la pantalla no las usa, `FAIL`. Sin fuente y sin esas librerías, `STATUS: SKIP`. No opines de estética más allá de lo que el config y el escenario piden. `OWNER: developer`.
 
 ```
 STATUS: PASS|FAIL|SKIP

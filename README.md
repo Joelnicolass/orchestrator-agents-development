@@ -45,13 +45,11 @@ Después de editar `agents/`, `commands/`, `skills/`, `hooks/` o `tools/` en est
 | Rápido (default) | Todo lo que no cambia capacidad, contrato, datos persistentes ni un flujo de usuario | `sdd-fast` |
 | Completo | Capacidad nueva, contrato, datos persistentes o flujo nuevo | `sdd-orchestrated` |
 
-En el completo, el proposal cabe en 40 líneas y hay un solo spec. El critique corre antes de implementar. Nadie implementa mientras `approval.md` diga `pending`. Un hueco descubierto durante la implementación se parcha con `/sdd-amend`: critique del delta y un sí corto, sin abrir otro change.
-
-El tech lead escribe casos de prueba en lenguaje natural. El código de esos tests lo escribe el test engineer. El dev se autocorrige con el chequeo del repo antes de llegar al reviewer. El QA de diseño corre solo si el dominio lo dejó en `yes` y hay una fuente. El e2e nace apagado: hace falta un comando que ya exista y un sí en el chat.
+En el completo, el producto se parte en features y en changes chicos. Se implementa uno por vez, con critique y aprobación. Cada capacidad nombrada queda en la lista. Si el config pide un stack visual, la primera pantalla lo usa.
 
 ## Flujos
 
-El chat principal enruta. Los subagentes no ven la conversación: reciben el slug, el carril y solo el recorte de su rol. Critique y tech lead usan el modelo del chat. El resto usa un modelo más barato.
+El chat principal enruta. Un producto con varias capacidades no entra a implementar de una vez.
 
 ### Enrutado
 
@@ -63,28 +61,21 @@ flowchart TD
 
   pedido[Pedido] --> kit{Es trabajo sobre el kit?}
   kit -->|si| directo[Se edita en este chat, sin change]
-  kit -->|no| claro{El pedido ya nombra el resultado?}
-  claro -->|no| start[sdd-start]
-  claro -->|si| tipo{Capacidad, contrato, datos persistentes o flujo nuevo?}
-  start --> modo{Hay codigo en el repo?}
-  modo -->|si| scan[Escanea stack, chequeo y openspec]
-  modo -->|no| preguntas[Preguntas en tandas de 3 a 5]
-  scan --> falta{El codigo no alcanza?}
-  falta -->|si| preguntas
-  falta -->|no| tipo
-  preguntas --> tipo
-  tipo -->|no| rapido[Carril rapido]
-  tipo -->|si| completo[Carril completo]
-  tipo -->|no esta claro| triage[sdd-triage]
-  triage -->|fast-track| rapido
-  triage -->|full| completo
+  kit -->|no| puntual{Ajuste de 1 a 3 archivos, sin capacidad nueva?}
+  puntual -->|si| rapido[Carril rapido]
+  puntual -->|no| start[sdd-start escribe product.md]
+  start --> features[sdd-features]
+  features --> split[sdd-split escribe el roadmap]
+  split --> espera[Se muestra el corte y se espera]
+  espera --> next[sdd-next un solo change]
+  next --> completo[Flujo completo de ese change]
 
-  class directo,preguntas human
-  class rapido,scan fast
-  class completo,triage,start full
+  class directo,espera human
+  class rapido fast
+  class start,features,split,next,completo full
 ```
 
-Si el pedido ya nombra el resultado, se clasifica el carril. El stack y los lineamientos se preguntan igual, salvo que `openspec/config.yaml` ya los tenga. Sin eso no hay proposal ni implementación.
+`/sdd-start` pregunta el resultado y el stack, y lista cada capacidad. `/sdd-features` le pone criterios. `/sdd-split` arma cortes chicos y no implementa. `/sdd-next` corre proposal, critique, aprobación, plan, dev y review solo para el primero que esté libre.
 
 ### Carril rápido
 
@@ -222,7 +213,10 @@ En el chat del repo instalado:
 
 | Comando | Qué hace |
 | --- | --- |
-| `/sdd-start` | Pregunta el resultado y las reglas técnicas, o confirma las que ya hay en el repo |
+| `/sdd-start` | Pregunta, escribe el producto y se detiene |
+| `/sdd-features` | Lista cada capacidad con criterios |
+| `/sdd-split` | Parte el producto en changes chicos, sin implementar |
+| `/sdd-next` | Corre el flujo completo de un solo change |
 | `/sdd-triage` | Elige carril |
 | `/sdd-propose` | Proposal y specs |
 | `/sdd-critique` | Huecos y choques con las reglas; después se detiene |

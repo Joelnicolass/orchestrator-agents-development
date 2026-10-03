@@ -3,13 +3,15 @@ name: sdd-start
 description: Arranca el flujo con preguntas o escaneando el proyecto ya creado.
 ---
 
-Sigue el skill `sdd-orchestrator`. Este comando no implementa. No escribas `PRD.md` ni una carpeta `RFCs/`.
+Sigue el skill `sdd-orchestrator`. No implementes. El producto queda en `openspec/product.md` (hace el papel del PRD). No escribas `PRD.md` ni una carpeta `RFCs/`.
 
 Elige el modo en este orden:
 
 1. Hay código, manifiesto o `README` en el repo: escanea primero.
-2. El pedido ya dice el resultado y el archivo o el flujo: con el escaneo alcanza. No preguntes lo que el repo ya responde.
+2. El pedido ya dice el resultado: el escaneo evita preguntar lo que el repo responde. Igual se escribe el producto.
 3. Falta el resultado, o no hay proyecto: pregunta.
+
+El siguiente paso, en otro turno, es `sdd-features`.
 
 ## Escanear
 
@@ -46,19 +48,19 @@ No preguntes negocio, auth, SQL o infraestructura si el producto no los tiene. E
 
 ## Cerrar el arranque
 
-Escribe el stack, la arquitectura, las reglas y el comando de chequeo en `openspec/config.yaml`, dentro de `context`. Suma las reglas de código en `rules` sin borrar las de proposal, specs, critique ni approval. Si la persona no las definió, detente en esa pregunta. No supongas un framework.
+Escribe el stack, la arquitectura, las reglas y el comando de chequeo en `openspec/config.yaml`, dentro de `context`. Suma las reglas de código en `rules` sin borrar las de proposal, specs, critique ni approval. Si la persona nombró librerías de interfaz, quedan en `context` con ese nombre. Si no las definió, detente. No supongas un framework.
 
-Cuando el carril se puede elegir y el config ya tiene esas reglas, escribe `openspec/intake.md` en máximo 40 líneas:
+Escribe `openspec/product.md`. Cada capacidad que la persona nombró es una viñeta propia. No las fusiones ni las borres para acortar. Registro, pantallas y librerías pedidas entran en "Incluye".
 
 ```markdown
-# Intake
+# Producto
 
 - Tipo:
-- Lane: fast-track|full
-- Resultado:
+- Para quién:
+- Incluye:
 - Fuera:
 - Stack y reglas: openspec/config.yaml
-- Leído:
+- Abierto:
 ```
 
-Después entra al carril sin pedir otro comando. Fast-track sigue en `sdd-implement`. Completo sigue en `sdd-propose`, usando este intake como pedido. Si el pedido se parte en varios changes, el primero es el que desbloquea a los demás; los otros quedan nombrados en el intake y no se abren todavía.
+Muestra el archivo y termina el turno. No abras un change ni implementes. Si falta una capacidad que sí dijeron, se agrega antes de seguir. El siguiente comando es `sdd-features`.

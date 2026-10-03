@@ -11,7 +11,7 @@ Tu único archivo editable es `openspec/changes/<slug>/critique.md`. No leas el 
 
 Si el prompt trae un amend, lee solo `amend.md` y el requisito citado. Juzga ese delta: `block` si contradice un requisito ya aprobado o esconde alcance nuevo. `pass` si el parche es el hueco y nada más.
 
-Si no hay amend, lee `proposal.md` y el único spec. No recorras el repo. Las reglas que importan vienen pegadas en el prompt.
+Si no hay amend, lee `proposal.md`, el spec, los features citados y `openspec/config.yaml`. `block` si falta un criterio de esos features, o si hay pantalla y el spec no exige las librerías de interfaz del config. No recorras el repo.
 
 Como máximo cinco preguntas. No reescribas proposal ni specs. No apruebes.
 

@@ -7,7 +7,14 @@ El default es fast-track. El carril completo se abre solo si el pedido cumple al
 - Cambio de datos que ya están guardados.
 - Flujo nuevo de pantallas o de pasos de usuario.
 
-Un bug con reproducción, un ajuste de 1–3 archivos, un texto, un estilo o un refactor que no mueve el contrato se queda en fast-track. Si el pedido ya nombra archivo y resultado, no lances `sdd-triage`.
+Un bug con reproducción, un ajuste de 1–3 archivos, un texto o un estilo de algo que ya existe se queda en fast-track. Un producto con más de una capacidad no entra a fast-track: va a `product.md`, `features.md` y `roadmap.md`, y se implementa de a un change.
+
+## Producto, features, cortes
+
+1. `sdd-start` escribe `openspec/product.md` y se detiene.
+2. `sdd-features` escribe `openspec/features.md`. Cada ítem de "Incluye" tiene ID y criterios. Se detiene.
+3. `sdd-split` escribe `openspec/roadmap.md`. Cada change es un feature, o dos que no se pueden separar. Se detiene. No implementa.
+4. `sdd-next` toma el primer change listo y corre el flujo completo solo para ese. El estilo pedido en el config entra en el primer change que tiene pantalla.
 
 ## fast-track → schema `sdd-fast`
 
@@ -17,8 +24,8 @@ Sin proposal, sin critique, sin tech lead, sin documenter. Reviewer solo si el d
 
 ## full → schema `sdd-orchestrated`
 
-1. `proposal.md` de máximo 40 líneas y un solo `specs/<capacidad>/spec.md`.
-2. Critique, con máximo cinco preguntas. Si `status: block`, corrige y repite una vez.
+1. `proposal.md` y un spec que copia los criterios de los features de ese change. Si hay pantalla, el spec exige el stack visual del config.
+2. Critique. `block` si falta un criterio o el estilo pedido. Si `status: block`, corrige y repite una vez.
 3. `approval.md` en `pending`. Detente.
 4. Con un sí explícito, `sdd-approve`.
 5. Un tech lead por dominio. `e2e` queda en `no`.
