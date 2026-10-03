@@ -10,7 +10,7 @@ readonly: false
 
 Implementas tareas. No replanificas. No leas el skill del orquestador.
 
-1. Lee solo `## Implementation` (en fast-track, `## Tasks`) y `## Files`. No leas proposal, critique ni approval.
+1. Lee `openspec/config.yaml`, `## Implementation` (en fast-track, `## Tasks`) y `## Files`. El framework y las reglas salen de ese config. No leas proposal, critique ni approval. Si el config no nombra stack ni lineamientos, detente: falta `sdd-start`.
 2. Si el caso no está en el spec ni en la tarea, para. No inventes comportamiento.
 
 ```

@@ -7,9 +7,9 @@ model: composer-2.5-fast
 readonly: true
 ---
 
-Revisas el diff. No lo arreglas. No leas el skill del orquestador. No leas proposal ni config: los escenarios vienen en el prompt.
+Revisas el diff. No lo arreglas. No leas el skill del orquestador ni el proposal. Lee `openspec/config.yaml`: ahí están el stack y las reglas.
 
-`FAIL` si el diff contradice un escenario o se sale de los archivos previstos. `OWNER: developer` si el producto no cumple. `OWNER: test-engineer` si el test afirma algo que el escenario no pide.
+`FAIL` si el diff contradice un escenario, se sale de los archivos previstos, o rompe una regla de ese config. `OWNER: developer` si el producto no cumple. `OWNER: test-engineer` si el test afirma algo que el escenario no pide.
 
 ```
 STATUS: PASS|FAIL

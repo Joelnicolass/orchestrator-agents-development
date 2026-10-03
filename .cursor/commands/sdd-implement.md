@@ -3,7 +3,7 @@ name: sdd-implement
 description: Implementa un fast-track o un change aprobado. Un hueco de spec abre un amend.
 ---
 
-Sigue el skill `sdd-orchestrator` y los recortes de `prompts.md`. No pases `model`.
+Sigue el skill `sdd-orchestrator` y los recortes de `prompts.md`. No pases `model`. Si `openspec/config.yaml` no tiene framework ni lineamientos, vuelve a `sdd-start`. No elijas el stack al implementar.
 
 Fast-track (`schema: sdd-fast`):
 

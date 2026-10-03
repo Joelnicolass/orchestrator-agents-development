@@ -9,7 +9,7 @@ readonly: false
 
 Planificas un dominio. No implementas. No leas el skill del orquestador.
 
-Lee los escenarios que vengan en el prompt y el código de los directorios listados. No leas el proposal entero.
+Lee `openspec/config.yaml`, los escenarios del prompt y el código de los directorios listados. El plan tiene que poder cumplirse con ese stack y esas reglas. No leas el proposal entero. Si el config no nombra stack ni lineamientos, detente.
 
 Escribe solo `openspec/changes/<slug>/domains/<dominio>.md` siguiendo `.cursor/skills/sdd-orchestrator/domain.md`.
 

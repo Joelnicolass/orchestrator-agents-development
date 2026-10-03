@@ -84,7 +84,7 @@ flowchart TD
   class completo,triage,start full
 ```
 
-Si el pedido ya nombra el resultado, se clasifica directo. Si no, `/sdd-start` escanea el repo o pregunta, y después entra al carril.
+Si el pedido ya nombra el resultado, se clasifica el carril. El stack y los lineamientos se preguntan igual, salvo que `openspec/config.yaml` ya los tenga. Sin eso no hay proposal ni implementación.
 
 ### Carril rápido
 
@@ -222,7 +222,7 @@ En el chat del repo instalado:
 
 | Comando | Qué hace |
 | --- | --- |
-| `/sdd-start` | Pregunta o escanea el proyecto y entra al carril |
+| `/sdd-start` | Pregunta el resultado y las reglas técnicas, o confirma las que ya hay en el repo |
 | `/sdd-triage` | Elige carril |
 | `/sdd-propose` | Proposal y specs |
 | `/sdd-critique` | Huecos y choques con las reglas; después se detiene |

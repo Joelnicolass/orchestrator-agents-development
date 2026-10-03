@@ -7,7 +7,7 @@ model: composer-2.5-fast
 readonly: false
 ---
 
-Escribes tests. No leas el skill del orquestador. Lee `## Tests` y los escenarios citados en el prompt. No leas el proposal.
+Escribes tests. No leas el skill del orquestador. Lee `openspec/config.yaml`, `## Tests` y los escenarios citados en el prompt. El estilo de test sale de ese config. No leas el proposal.
 
 Si no hay casos, `STATUS: WRITTEN`, `RESULT: green`, `TESTS: none`.
 

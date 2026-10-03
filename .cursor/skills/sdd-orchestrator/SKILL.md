@@ -27,13 +27,14 @@ Motor de specs: **OpenSpec**, carpeta `openspec/`. Schemas: `sdd-fast` (default)
 8. Un hueco encontrado al implementar se cierra con `sdd-amend`. No abras otro change.
 9. Máximo dos vueltas de critique y dos de `FAIL`.
 10. Si el pedido edita este kit (`agents/`, `skills/`, `schemas/`, `hooks/`, `tools/`), trabaja directo.
+11. Sin stack ni reglas en `openspec/config.yaml` no hay `sdd-propose` ni `sdd-implement`.
 
 Carriles: [lanes.md](lanes.md). Lanzamiento: [prompts.md](prompts.md). Fragmento de dominio: [domain.md](domain.md).
 
 ## Arranque
 
 1. Lee `openspec/config.yaml` si existe. Si no hay `openspec/`, hace falta `./install.sh` en el repo de la app.
-2. Si el pedido no nombra el resultado, o el `context` del config sigue en el texto de ejemplo, corre `sdd-start` antes de clasificar. Ahí se escanea el repo o se pregunta, y se escribe `openspec/intake.md`.
+2. Si el pedido no nombra el resultado, o `openspec/config.yaml` no tiene framework y lineamientos de quien programa, corre `sdd-start` y detente hasta tenerlos. No elijas el stack. El escaneo sirve para mostrar lo que ya hay y pedir un sí.
 3. Clasifica con [lanes.md](lanes.md). `sdd-triage` solo si, después del arranque, sigue sin verse si hay capacidad, contrato, datos o flujo nuevo.
 4. Sigue el comando de la fase. Instalados quedan en `.cursor/commands/`.
 

@@ -12,4 +12,4 @@ alwaysApply: true
 - El default es el schema `sdd-fast`. `sdd-orchestrated` solo si hay capacidad nueva, contrato, datos persistentes o un flujo nuevo, y espera `status: approved`.
 - Un hueco de spec se parcha con `sdd-amend`. No se abre otro change.
 - El chequeo es `.cursor/sdd-auto-eval.cmd` si existe. Si no, el `command:` del change.
-- El stack sale de `openspec/config.yaml` y de `.cursor/rules`.
+- El stack y los lineamientos los define quien programa. Viven en `openspec/config.yaml`. Sin eso no se implementa.

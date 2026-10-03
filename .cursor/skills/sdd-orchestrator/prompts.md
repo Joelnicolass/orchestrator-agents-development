@@ -10,6 +10,7 @@ Change: openspec/changes/{{slug}}
 Lane: {{lane}}
 Dominio: {{domain}}
 No leas el skill del orquestador ni abras otro sistema de specs.
+Lee openspec/config.yaml: el context y las rules son el stack y los lineamientos. No uses otro.
 Lee solo el recorte de tu rol. Responde solo con tu contrato.
 ```
 
@@ -23,10 +24,10 @@ Pega en el prompt solo esto. No adjuntes el change entero.
 | --- | --- |
 | Critique | `proposal.md` si cabe en 40 líneas, el spec, y como máximo 30 líneas de reglas pegadas en el prompt. Sin recorrer el repo. |
 | Critique de amend | `amend.md` y el requisito citado. Nada más. |
-| Tech lead | Escenarios del spec y los directorios listados en el prompt. |
-| Test engineer | `## Tests` y los escenarios citados. |
-| Developer | `## Implementation` o, en fast-track, `## Tasks`, más `## Files`. |
-| Reviewer | Diff y escenarios citados. |
+| Tech lead | `openspec/config.yaml`, escenarios del spec y los directorios listados. |
+| Test engineer | `openspec/config.yaml`, `## Tests` y los escenarios citados. |
+| Developer | `openspec/config.yaml`, `## Implementation` o, en fast-track, `## Tasks`, más `## Files`. |
+| Reviewer | `openspec/config.yaml`, el diff y los escenarios citados. |
 | QA design | Fuente citada y archivos de UI del diff. |
 | QA e2e | Comando y escenario. Sin la línea `e2e: confirmed`, responde SKIP. |
 | Documenter | `tasks.md`. Sin leer código. |
